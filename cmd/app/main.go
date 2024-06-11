@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"os"
 )
 
 type Task struct {
@@ -19,11 +20,22 @@ func main() {
 	var task string
 	var read bool
 	var completed, deleted int
-	flag.StringVar(&task, "task", "", "Give the task description")
+	var help bool
+	flag.StringVar(&task, "task", "", "Add a task")
 	flag.IntVar(&completed, "complete", 0, "Mark a task as completed")
 	flag.BoolVar(&read, "read", false, "Get the list")
 	flag.IntVar(&deleted, "delete", 0, "Delete the selected Id")
+	flag.BoolVar(&help, "help", false, "Show Commands")
 	flag.Parse()
+
+	if len(os.Args) < 2 {
+		fmt.Println("A parameter is required. Type -help to show the commands.")
+		os.Exit(0)
+	}
+	if help {
+		flag.PrintDefaults()
+		os.Exit(0)
+	}
 
 	list, err := NewList()
 	if err != nil {

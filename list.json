@@ -1,18 +1,18 @@
 {
 	"1": {
-		"task": "paok",
-		"completed": "✓"
-	},
-	"2": {
 		"task": "pao",
 		"completed": "✓"
 	},
-	"3": {
+	"2": {
 		"task": "na plirwsw to reuma",
 		"completed": "✓"
 	},
-	"4": {
+	"3": {
 		"task": "na plirwsw reuma",
+		"completed": "✓"
+	},
+	"4": {
+		"task": "Hide encryption/decryption key",
 		"completed": "✓"
 	}
 }

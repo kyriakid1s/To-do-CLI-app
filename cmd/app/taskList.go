@@ -18,6 +18,18 @@ func NewList() (*List, error) {
 }
 
 func (l *List) GetTasks() error {
+	_, err := os.Stat("list.json")
+	if errors.Is(err, os.ErrNotExist) {
+		file, err := os.Create("list.json")
+		if err != nil {
+			return err
+		}
+		if _, err := file.Write([]byte("{}")); err != nil {
+			return err
+		}
+		defer file.Close()
+	}
+
 	data, err := os.ReadFile("list.json")
 	if err != nil {
 		return err
@@ -27,7 +39,9 @@ func (l *List) GetTasks() error {
 
 func (l *List) AddNew(task Task) {
 	l.TaskList[len(l.TaskList)+1] = task
-	l.Save()
+	if err := l.Save(); err != nil {
+		fmt.Println(err)
+	}
 }
 
 func (l *List) Complete(id int) error {
@@ -37,7 +51,9 @@ func (l *List) Complete(id int) error {
 	}
 	value.Completed = "\u2713"
 	l.TaskList[id] = value
-	l.Save()
+	if err := l.Save(); err != nil {
+		fmt.Println(err)
+	}
 	fmt.Printf("Well done for completing task n.%d !\n", id)
 	return nil
 }
@@ -47,7 +63,7 @@ func (l *List) Save() error {
 	if err != nil {
 		return err
 	}
-	return os.WriteFile("list.json", []byte(json), 0644)
+	return os.WriteFile("list.json", []byte(json), 0o644)
 }
 
 func (l *List) Read() {
@@ -72,6 +88,8 @@ func (l *List) Delete(id int) error {
 			delete(l.TaskList, index)
 		}
 	}
-	l.Save()
+	if err := l.Save(); err != nil {
+		fmt.Println(err)
+	}
 	return nil
 }

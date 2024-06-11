@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"sort"
+	"text/template"
 )
 
 func NewList() (*List, error) {
@@ -72,8 +73,18 @@ func (l *List) Read() {
 		sortedList = append(sortedList, key)
 	}
 	sort.Ints(sortedList)
-	for _, id := range sortedList {
-		fmt.Printf("%d. %s [%s] \n", id, l.TaskList[id].Task, l.TaskList[id].Completed)
+	// for _, id := range sortedList {
+	// 	fmt.Printf("%d. %s [%s] \n", id, l.TaskList[id].Task, l.TaskList[id].Completed)
+	// }
+	tmpl, err := template.New("ui.tmpl").ParseFiles("cmd/app/ui.tmpl")
+	if err != nil {
+		fmt.Println("err in tmpl, ", err)
+		return
+	}
+	err = tmpl.Execute(os.Stdout, l.TaskList)
+	if err != nil {
+		fmt.Println("err executing tmpl")
+		panic(err)
 	}
 }
 

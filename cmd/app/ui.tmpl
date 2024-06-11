@@ -1,0 +1,3 @@
+{{- range $key, $value := . }}
+{{$key }}  {{printf "%-30s" $value.Task}}  {{$value.Completed}}
+{{ end }}
